@@ -5,49 +5,40 @@ import com.example.clanhubadv.dto.responses.UserResponseDto;
 import com.example.clanhubadv.entity.Role;
 import com.example.clanhubadv.entity.User;
 import com.example.clanhubadv.repository.RoleRepository;
-import com.example.clanhubadv.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 @RequiredArgsConstructor
 public class UserConverter {
-
+    
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
-
-    public UserResponseDto createDtoFromUser(User user) {
-        return new UserResponseDto(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole(),
-                user.getAvatarId(),
-                user.getAge()
-        );
-    }
 
     public User createUserFromDto(RegistrationRequest request) {
-        User newUser = new User();
-        newUser.setUsername(request.getUsername());
-        newUser.setEmail(request.getEmail());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        newUser.setAvatarId(request.getAvatarId());
-        newUser.setAge(request.getAge());
+        Role role = roleRepository.findByRoleName(request.getRole())
+                .orElseGet(() -> roleRepository.save(new Role(request.getRole())));
 
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(role);
+        user.setAvatarId(request.getAvatarId());
+        user.setAge(request.getAge());
+        
+        return user;
+    }
 
-        Optional<Role> defaultRole = roleRepository.findByRoleName("USER");
-
-        if(defaultRole.isEmpty()) {
-            Role userRole = new Role("USER");
-            defaultRole = Optional.of(roleRepository.save(userRole));
-        }
-
-        newUser.setRole(defaultRole.get());
-        return newUser;
+    public UserResponseDto createDtoFromUser(User user) {
+        UserResponseDto dto = new UserResponseDto();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole().getRoleName());
+        dto.setAvatarId(user.getAvatarId());
+        dto.setAge(user.getAge());
+        return dto;
     }
 }

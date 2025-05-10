@@ -50,5 +50,11 @@ public class RegistrationRequest {
         @Max(value = 100, message = "Age must not exceed 100")
         @Schema(description = "User's age", example = "25", minimum = "5", maximum = "100")
         private Integer age;
+        
+        @NotNull(message = "Role must not be empty")
+        @Pattern(regexp = "^(ROLE_USER|ROLE_ADMIN)$", message = "Role must be either ROLE_USER or ROLE_ADMIN")
+        @Schema(description = "User's role", example = "ROLE_USER", allowableValues = {"ROLE_USER", "ROLE_ADMIN"})
+        private String role;
+
     }
 
