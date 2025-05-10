@@ -56,5 +56,9 @@ public class RegistrationRequest {
         @Schema(description = "User's role", example = "ROLE_USER", allowableValues = {"ROLE_USER", "ROLE_ADMIN"})
         private String role;
 
+        @NotBlank(message = "Invite code cannot be empty")
+        @Schema(description = "Family invite code", example = "FAMILY123", required = true)
+        private String inviteCode;
+
     }
 

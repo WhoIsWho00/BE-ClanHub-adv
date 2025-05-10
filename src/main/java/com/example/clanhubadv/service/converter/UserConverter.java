@@ -36,7 +36,7 @@ public class UserConverter {
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
-        dto.setRole(user.getRole().getRoleName());
+        dto.setRole(user.getRole());
         dto.setAvatarId(user.getAvatarId());
         dto.setAge(user.getAge());
         return dto;

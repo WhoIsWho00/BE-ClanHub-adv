@@ -19,6 +19,9 @@ public class JwtCore {
     private long jwtLifeTime;
 
     private Key getSigningKey() {
+        if (jwtSecret.length() < 32) {
+            throw new IllegalArgumentException("JWT secret must be at least 256 bits (32 characters) long.");
+        }
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -57,4 +60,4 @@ public class JwtCore {
 
         return claims.getSubject();
     }
-   }
+}
