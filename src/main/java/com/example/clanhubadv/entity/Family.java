@@ -3,6 +3,7 @@ package com.example.clanhubadv.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -28,4 +29,12 @@ public class Family {
     @NotNull
     @Column(name = "invite_code" ,nullable = false, unique = true)
     private UUID inviteCode;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }
