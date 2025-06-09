@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,5 +42,8 @@ public class User {
 
     @Column(name = "age")
     private Integer age;
+
+    @Enumerated(EnumType.STRING)
+    private FamilyRole familyRole;
 
 }

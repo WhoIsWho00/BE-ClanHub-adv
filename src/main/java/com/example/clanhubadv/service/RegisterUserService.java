@@ -52,6 +52,10 @@ public class RegisterUserService {
             throw new UserAlreadyExistException("User with email " + request.getEmail() + " already exists");
         }
         User newUser = converter.createUserFromDto(request);
+        
+        // Добавьте установку семейной роли при создании пользователя
+        newUser.setFamilyRole(request.getFamilyRole());
+        
         User savedUser = userRepository.save(newUser);
 
         logRepository.save(new UserRegistrationLog(ip, LocalDateTime.now()));
